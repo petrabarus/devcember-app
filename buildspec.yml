@@ -6,3 +6,10 @@ phases:
             - apt-get update -y
             - apt-get install -y npm
             - npm install
+    build:
+        commands:
+            - npm run build
+
+    post_build:
+        commands:
+            - echo "Upload to Lambda"
