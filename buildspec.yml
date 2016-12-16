@@ -5,11 +5,13 @@ phases:
         commands:
             - apt-get update -y
             - apt-get install -y npm
-            - npm install
+            - nodejs --version
     build:
         commands:
+            - npm install
             - npm run build
 
     post_build:
         commands:
             - echo "Upload to Lambda"
+            - echo "Upload to S3"
