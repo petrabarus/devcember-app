@@ -1,0 +1,76 @@
+swagger: '2.0'
+info:
+  title: Devcember App
+  version: "1.0.0"
+basePath: /
+produces:
+  - application/json
+paths:
+  /comments/list:
+    get:
+      summary: List Comments
+      description: |
+        Returns list of comments.
+      parameters:
+        - name: start
+          in: query
+          required: false
+          type: number
+          format: integer
+      tags:
+        - Post
+      responses:
+        200:
+          description: Array of comments
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Comment'
+  /comments/post:
+    post:
+      summary: Post a single comment
+      description: |
+        Post a single comment
+      parameters:
+        - name: name
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/NewComment'
+      tags:
+        - Post
+      responses:
+        200:
+          description: Single comment
+          schema:
+            $ref: '#/definitions/Comment'
+definitions:
+  NewComment:
+    type: object
+    properties:
+      name:
+        type: string
+      content:
+        type: string
+  Comment:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      content:
+        type: string
+      time:
+        type: integer
+        format: int32
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string

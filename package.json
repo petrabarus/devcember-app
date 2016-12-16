@@ -1,0 +1,22 @@
+{
+  "name": "devcember-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-latest": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "less": "2.7.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-js": "./node_modules/.bin/babel web/script.es6 --presets es2015,react > web/script.js",
+    "build-less": "./node_modules/.bin/lessc web/style.less > web/style.css",
+    "build": "npm run build-js && npm run build-less"
+  },
+  "author": "",
+  "license": "ISC"
+}
