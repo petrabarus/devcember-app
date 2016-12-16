@@ -6,8 +6,6 @@ phases:
             - apt-get update -y
             - wget -qO- https://deb.nodesource.com/setup_6.x | sudo bash -
             - apt-get install -y nodejs
-            - which npm
-            - which node
 
     build:
         commands:
@@ -16,5 +14,5 @@ phases:
 
     post_build:
         commands:
-            - echo "Upload to Lambda"
-            - echo "Upload to S3"
+            - aws s3 cp --acl public-read --recursive web/ s3://$WEBSITE_UPLOAD_BUCKET/
+            - echo "https://s3.amazonaws.com/$WEBSITE_UPLOAD_BUCKET/index.html"
