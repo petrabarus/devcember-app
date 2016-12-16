@@ -5,8 +5,8 @@ phases:
         commands:
             - apt-get update -y
             - wget -qO- https://deb.nodesource.com/setup_6.x | sudo bash -
-            - apt-get install -y nodejs npm
             - which nodejs
+            - which npm
             - which node
 
     build:
