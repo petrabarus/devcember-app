@@ -1,4 +1,8 @@
 import json
+import time
+import boto3
+
+client = boto3.client('dynamodb')
 
 def fetchCommentFromDatabase():
     return [
@@ -31,13 +35,36 @@ def getListComment(event, context):
 
     return response
 
+def putCommentToDatabase(comment):
+    return client.put_item(
+        TableName='DevcemberAppComments',
+        Item={
+            'id': {
+                'S': str(comment['id'])
+            },
+            'name': {
+                'S': str(comment['name'])
+            },
+            'comment': {
+                'S': str(comment['comment'])
+            },
+            'createdAt': {
+                'N': str(comment['createdAt'])
+            }
+        }
+    )
+
 def postComment(event, context):
+    timestamp = int(time.time())
+    postedComment = json.loads(event['body'])
     comment = {
-        "id": 3,
-        "name": 'Petra',
-        "comment": 'Hello World!',
-        "createdAt": 1481924300,
+        "id": timestamp,
+        "name": postedComment['name'],
+        "comment": postedComment['comment'],
+        "createdAt": timestamp
     }
+    response = putCommentToDatabase(comment)
+
     body = {
         "comment": comment
     }
