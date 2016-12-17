@@ -2,11 +2,14 @@ class CommentForm extends React.Component {
     constructor(props) {
         super(props);
     }
+    handleSubmit() {
+        return false;
+    }
     render() {
         return (
             <div className="panel panel-default">
                 <div className="panel-body">
-                    <form>
+                    <form onSubmit={this.handleSubmit}>
                         <div className="form-group">
                             <input type="text" className="form-control" id="name" placeholder="Put your name here"/>
                         </div>
@@ -30,7 +33,8 @@ class CommentListItem extends React.Component {
     render() {
         let comment = this.props.comment;
         let date = new Date(comment.createdAt * 1000);
-        let timeLabel = date.toLocaleDateString("en-US", {weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"});
+        let timeLabelOptions = {weekday: "long", year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"};
+        let timeLabel = date.toLocaleDateString("en-US", timeLabelOptions);
         return (
             <div id={comment.id} className="panel panel-default">
                 <div className="panel-body">
@@ -47,23 +51,20 @@ class CommentListItem extends React.Component {
 class CommentList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {comments: [
-            {
-                id: 1,
-                name: 'Petra',
-                comment: 'Hello World!',
-                createdAt: 1481924490,
-            },
-            {
-                id: 2,
-                name: 'Petra',
-                comment: 'Hello World!',
-                createdAt: 1481924300,
-            }
-        ]};
+        this.state = {comments: []};
+    }
+    loadComments() {
+        let url = API_BASE_URL + 'comments/list';
+        fetch(url)
+            .then((response) => {
+                return response.json();
+            })
+            .then((json) => {
+                this.setState({comments: json.comments});
+            });
     }
     componentDidMount() {
-
+        this.loadComments();
     }
     render() {
         let listItems = this.state.comments.map((comment) =>

@@ -1,76 +1,135 @@
-swagger: '2.0'
+---
+swagger: "2.0"
 info:
-  title: Devcember App
   version: "1.0.0"
-basePath: /
-produces:
-  - application/json
+  title: "Devcember App"
+schemes:
+- "https"
 paths:
   /comments/list:
     get:
-      summary: List Comments
-      description: |
-        Returns list of comments.
+      produces:
+      - "application/json"
       parameters:
-        - name: start
-          in: query
-          required: false
-          type: number
-          format: integer
-      tags:
-        - Post
+      - name: "start"
+        in: "query"
+        required: false
+        type: "string"
       responses:
         200:
-          description: Array of comments
+          description: "200 response"
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Comment'
+            $ref: "#/definitions/ArrayOfComment"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+    options:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          "default":
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods : "'*'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+            responseTemplates:
+              application/json: |
+                {}
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
   /comments/post:
     post:
-      summary: Post a single comment
-      description: |
-        Post a single comment
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
       parameters:
-        - name: name
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/NewComment'
-      tags:
-        - Post
+      - in: "body"
+        name: "NewComment"
+        required: true
+        schema:
+          $ref: "#/definitions/NewComment"
       responses:
         200:
-          description: Single comment
+          description: "200 response"
           schema:
-            $ref: '#/definitions/Comment'
+            $ref: "#/definitions/Comment"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+    options:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          "default":
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods : "'*'"
+              method.response.header.Access-Control-Allow-Origin : "'*'"
+            responseTemplates:
+              application/json: |
+                {}
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
 definitions:
-  NewComment:
-    type: object
-    properties:
-      name:
-        type: string
-      content:
-        type: string
   Comment:
-    type: object
+    type: "object"
     properties:
       id:
-        type: string
+        type: "string"
       name:
-        type: string
+        type: "string"
       content:
-        type: string
+        type: "string"
       time:
-        type: integer
-        format: int32
-  Error:
-    type: object
+        type: "integer"
+        format: "int32"
+  NewComment:
+    type: "object"
     properties:
-      code:
-        type: integer
-        format: int32
-      message:
-        type: string
-      fields:
-        type: string
+      name:
+        type: "string"
+      content:
+        type: "string"
+  ArrayOfComment:
+    type: "array"
+    items:
+      $ref: "#/definitions/Comment"
