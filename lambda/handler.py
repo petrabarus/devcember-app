@@ -2,23 +2,19 @@ import json
 import time
 import boto3
 
-client = boto3.client('dynamodb')
-
 def fetchCommentFromDatabase():
-    return [
-        {
-            "id": 1,
-            "name": 'Petra',
-            "comment": 'Hello World!',
-            "createdAt": 1481924490,
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('DevcemberAppComments')
+    response = table.scan()
+    json_serializable = map(
+        lambda item: {
+            'id': item['id'],
+            'name': item['name'],
+            'comment': item['comment'],
+            'createdAt': int(item['createdAt'])
         },
-        {
-            "id": 2,
-            "name": 'Petra',
-            "comment": 'Hello World!',
-            "createdAt": 1481924300,
-        }
-    ];
+        response['Items'])
+    return json_serializable
 
 def getListComment(event, context):
     comments = fetchCommentFromDatabase();
@@ -36,6 +32,7 @@ def getListComment(event, context):
     return response
 
 def putCommentToDatabase(comment):
+    client = boto3.client('dynamodb')
     return client.put_item(
         TableName='DevcemberAppComments',
         Item={
